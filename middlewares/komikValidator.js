@@ -23,25 +23,23 @@ function validateBody(schema) {
     return (req, res, next) => {
         const { error, value } = schema.validate(req.body, {
             abortEarly: false,
-            convert: true,      
-            allow
+            convert: true
         });
 
         if (error) {
             return errorResponse(
-            res,
-            "Validasi Input Gagal",
-            400,
-            error.details.ma((item) => ({
-                field: item.path.join('.'),
-                message: item.message
-            }))
-
-        );
-    }
-    req.body = value;
-    next();
- };
+                res,
+                "Validasi Input Gagal",
+                400,
+                error.details.map((item) => ({
+                    field: item.path.join('.'),
+                    message: item.message
+                }))
+            );
+        }
+        req.body = value;
+        next();
+    };
 }
 
 function validateParams(schema) {
